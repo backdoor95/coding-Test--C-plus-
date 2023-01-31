@@ -1,7 +1,12 @@
 #include <bits/stdc++.h>
+#include<iostream>
+#include <unordered_set>
+#include <unordered_map>
+
 using namespace std;
 //list<int> a;
 map<string, int> mp;
+
 string a[] = { "zoo", "yang", "park" };
 void print(list <int> a) {
 	for (auto it : a) cout << it << " ";
@@ -98,8 +103,11 @@ int main() {
 		cout << "정보 없음!!\n";
 	else
 		cout << " 찾았다!!" << endl;
+	// key 의 자료형에 맞춰서 넣어줘야한다. 
+	// 내가 했던 실수는 그냥 인덱스로 판단해서 숫자를 넣어서 빨간줄뜸
 
-	//mp[1].first; // 이렇게 접근이 불가능함.
+	cout << mp["BBangSSang"] << endl;
+	
 	// erase(key) 해당 키에 해당하는 요소를 지운다.
 	mp.erase("juno");
 
@@ -113,10 +121,22 @@ int main() {
 		cout << "못찾겠다 !" << endl;
 
 	mp["juno"] = 100;
+	//find(key)
+	// map에서 해당 key를 가진 요소를 찾아 해당 이터레이터를 반환함.
+	// 만약 못찾을 경우 mp.end() 해당 map의 end() 이터레이터를 반환함.
+
 	it = mp.find("juno");
 	if (it != mp.end())
 		cout << (*it).first << " : " << (*it).second << "\n";
 
+	// 범위기반 for루프로map에 있는 요소들을 순회합니다.
+	// map을 순회할 때는 key-> first, value -> second로 참조가능
+	/*
+	for(auto it : mp)
+	범위기반 for루프로 map에 있는 요소들을 순회합니다. map을 순회할 때는 key는 first,
+	value는 second로 참조가 가능합니다.
+	*/
+	// map은 이터레이터로 순회할 수 있다.
 
 	for (auto it : mp) {
 		cout << (it).first << " : " << (it).second << endl;
@@ -135,7 +155,68 @@ int main() {
 	}
 
 
-
+	// map에 있는 요소들을 다 제거합니다.
 	mp.clear();
+
+
+	//맵을 쓸 때 주의할 점
+	map<int, int> m1;
+	map<string, string> m2;
+	//
+	// 
+	//map 쓸때 주의점
+	// map의 경우 해당 인덱스에 참조만 해도 맵에 값이 생기며
+	// 맵의 요소가 생긴다..int형 같은 경우 0, string 은 빈문자열로 들어감
+	// 
+	//
+	cout << m1[1] << "\n";
+	cout << m2["kkkkkkkkk"] << '\n';
+	cout << "11111111111111111111111\n";
+	for (auto i : m1)cout << i.first << " " << i.second << endl;
+	cout << endl;
+	cout << "2222222222222222222222\n";
+	for (auto i : m2)cout << i.first << " " << i.second << endl;
+	
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL); cout.tie(NULL);
+	// map에 요소가 있는지 없는지를 확인하고 맵에 데이터를 할당하는 부분의 
+	// 로직을 다음과 같이 구축할 수 있습니다.
+	if (m1[1] == 0) {
+		m1[1] = 2;
+	}
+
+	for (auto i : m1)cout << i.first << " " << i.second << endl;
+	cout << endl;
+	/*
+	다만 앞의 코드는 문제에서 해당 키값에 0이 아닌 값이 들어갈 때 활용이 가능합니다. 만약
+	문제에서 키에 0이 들어가는 경우 앞의 코드는 활용이 불가능합니다.
+	이미 if문 안에 mp[1] == 0을 해버린 순간 이미 mp[1] = 0이 할당되어버리기 때문이죠.
+	*/
+
+
+	// 문제에서 map의 key - value 에서 값에 0이 들어가는 경우
+	// 아래와 같이 쓰는것이 좋다.
+	if (m1.find(1) == m1.end()) {
+		m1[1] = 2;
+	}
+	cout << endl;
+	for (auto i : m1)cout << i.first << " " << i.second << endl;
+
+	//unordered_map
+	// map은 정렬이 되는 방면, unordered_map은 정렬이 되지않는 map
+	/*
+	map과 unordered_map을 비교하면 다음과 같습니다.
+		- map : 정렬이 됨 / 레드블랙트리기반 / 탐색, 삽입, 삭제에 O(logN)이 걸림
+		- unordered_map : 정렬이 안됨 / 해시테이블 기반 / 탐색, 삽입, 삭제에 평균적으로
+			O(1), 가장 최악의 경우 O(N)
+	*/
+	unordered_map<string, int> umap;
+
+	umap["bbb"] = 2;
+	umap["kkkk"] = 3;
+	umap["wwww"] = 5;
+	for (auto it : umap) {
+		cout << it.first << " : " << it.second << "\n";
+	}
 	return 0;
 }
